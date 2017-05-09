@@ -1,0 +1,29 @@
+#! /bin/bash
+
+echo "Preparing:"
+set -x                          # Output commands
+set -e                          # Abort on errors
+
+cd /home/robert/simulations/static_tov/output-0002-active
+
+echo "Checking:"
+pwd
+hostname
+date
+
+echo "Environment:"
+export CACTUS_NUM_PROCS=1
+export CACTUS_NUM_THREADS=1
+export GMON_OUT_PREFIX=gmon.out
+export OMP_NUM_THREADS=1
+env > SIMFACTORY/ENVIRONMENT
+
+echo "Starting:"
+export CACTUS_STARTTIME=$(date +%s)
+#mpd --daemon
+mpirun -np 1 /home/robert/simulations/static_tov/SIMFACTORY/exe/cactus_sim -L 3 /home/robert/simulations/static_tov/output-0002/static_tov_small.par
+
+echo "Stopping:"
+date
+
+echo "Done."
